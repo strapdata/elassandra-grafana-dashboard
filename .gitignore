@@ -45,5 +45,3 @@ private/
 # virtualenv
 .venv/
 *.versionsBackup
-
-plugin/src/test/java/org/elassandra/index/toto.java

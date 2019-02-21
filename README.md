@@ -1,24 +1,27 @@
 # Elassandra Grafana Dashboard
 
-This repo provides Grafana dashboards for [Elassandra Enterprise](http://doc.elassandra.io/en/latest/enterprise.html) running under Kubernetes and monitored through the [Prometheus Operator](https://github.com/coreos/prometheus-operator)
+This repo provides Grafana dashboards for [Elassandra Enterprise](http://doc.elassandra.io/en/latest/enterprise.html) running under Kubernetes and monitored through the [Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
 ![elassandra grafana dashboard](images/elassandra-dashboard.png)
 
 ## Export JMX metrics
 
-To expose both Cassandra and Elasticsearch JMX metrics, set **jmx.enabled** to **true** in your /etc/cassandra/elasticsearch.yml configuration file (enabled by default), or set the environment variable ELASTICSEARCH__jmx_enabled="true".
+To expose both Cassandra and Elasticsearch JMX metrics, set **jmx.enabled** to **true** in your */etc/cassandra/elasticsearch.yml configuration* file (enabled by default), or set the docker environment variable **ELASTICSEARCH__jmx_enabled="true"**.
 
-Enable the JMX exporter by settings the following environment variables:
-* CASSANDRA_JMX_PROMETHEUS_EXPORTER_PORT="7500"
-* CASSANDRA_JMX_PROMETHEUS_EXPORTER_CONF="/usr/share/cassandra/conf/jmx_prometheus_exporter.yml"
- 
-The JMX exporter configuration file /usr/share/cassandra/conf/jmx_prometheus_exporter.yml is included in the Elassandra Enterprise docker image.
+Enable the Prometheus JMX exporter agent by settings the following environment variables:
+
+```bash
+CASSANDRA_JMX_PROMETHEUS_EXPORTER_PORT="7500"
+CASSANDRA_JMX_PROMETHEUS_EXPORTER_CONF="/usr/share/cassandra/conf/jmx_prometheus_exporter.yml"
+```
+
+The JMX exporter configuration file */usr/share/cassandra/conf/jmx_prometheus_exporter.yml* is included in the Elassandra Enterprise docker image.
 
 Restart Elassandra nodes and check metrics are available:
 
 ```bash
 kubectl exec -it elassandra-0 -- curl http://localhost:7500/metrics
-``` 
+```
 
 ## Add Kubernetes annotations
 
@@ -39,7 +42,7 @@ cluster: "my-cluster"
 datacenter: "DC1"
 ```
 
-If you deploy Elassandra through the HELM chart, the **release** label is automatically added to your Elassandra PODs.
+If you deploy Elassandra through the [Elassandra HELM chart](https://github.com/strapdata/helm-charts), the **release** label is automatically added to your Elassandra PODs.
  
 ## Configure Prometheus POD scraping
 
@@ -81,7 +84,7 @@ As the result, check that your Elassandra PODs have the expected tags in your Pr
 
 ## Import the Elassandra dashboard
 
-Upload the [Elassandra-kubernetes-dashborad.json](elassandra-kubernetes-dashboard.json) in your [Grafana import wizard](http://docs.grafana.org/features/export_import/#import).
+Upload the [elassandra-kubernetes-dashboard.json](https://github.com/strapdata/elassandra-grafana-dashboard/blob/master/elassandra-kubernetes-dashboard.json) in your [Grafana import wizard](http://docs.grafana.org/features/export_import/#import).
 
 
 
